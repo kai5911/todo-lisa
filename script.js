@@ -11,19 +11,47 @@ function addTask() {
     let span = document.createElement("span")
     span.innerHTML = "\u00d7";
     li.appendChild(span);
-  } inputBox.value = "";
-  saveData();
+    inputBox.value = "";
+    saveData();
+  } 
 }
 
 listContainer.addEventListener("click", function(e) {
-  if(e.target.tagName === "LI") {
+  if(e.target.tagName === "LI" && e.target.contentEditable !== "true") {
     e.target.classList.toggle("checked");
     saveData();
-  } else if(e.target.tagName === "SPAN") {
+  } else if(e.target.tagName === "SPAN" && e.target.parentElement.contentEditable !== "true") {
     e.target.parentElement.remove();
     saveData();
   }
 }, false);
+
+
+listContainer.addEventListener("dblclick", function(e) {
+  if (e.target.tagName === "LI") {
+    let backup = e.target.firstChild.nodeValue;
+    e.target.contentEditable = "true";
+
+    e.target.addEventListener("keydown", function(e){
+      if (e.key === "Enter") {
+        e.target.contentEditable = "false";
+        saveData()
+      } else if (e.key === "Escape") {
+          e.target.firstChild.nodeValue = backup;
+          e.target.contentEditable = "false";
+          saveData()
+      }
+    })
+
+    e.target.addEventListener("blur", function(e){
+      e.target.contentEditable = "false";
+      saveData()
+    })
+  }
+})
+
+
+// save
 
 function saveData() {
   localStorage.setItem('data', listContainer.innerHTML);
