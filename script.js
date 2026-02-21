@@ -29,11 +29,22 @@ listContainer.addEventListener("click", function(e) {
 
 listContainer.addEventListener("dblclick", function(e) {
   if (e.target.tagName === "LI") {
-    let backup = e.target.firstChild.nodeValue;
+    // WIP 
+     let backup = e.target.firstChild.nodeValue;
+    // -
     e.target.contentEditable = "true";
+    e.target.lastChild.contentEditable = "false";
 
     e.target.addEventListener("keydown", function(e){
       if (e.key === "Enter") {
+        // WIP
+        if (e.target.lastChild && e.target.lastChild.tagName === "SPAN") {
+          e.target.contentEditable = "false";
+          saveData();
+        } else {
+          e.target.innerHTML = backup;
+          e.target.contentEditable = "false";
+        }
         e.target.contentEditable = "false";
         saveData()
       } else if (e.key === "Escape") {
@@ -49,6 +60,8 @@ listContainer.addEventListener("dblclick", function(e) {
     })
   }
 })
+
+
 
 
 // save
